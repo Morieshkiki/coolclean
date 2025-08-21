@@ -22,20 +22,18 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "e83fc4ab-ea56-430a-9075-f1e846ddc20a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "e6ba6d0e-c9df-4263-b22e-b4a81a6c35e5",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "New action",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "2D Vector",
                     "id": "8875323e-3e41-4602-b2b2-48e93d1a0f27",
@@ -101,28 +99,11 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Interact",
-            "id": "b9eaf197-ada2-4196-bc29-f506b37bcc79",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "1e283e73-1a32-415b-b3d9-4debd527781f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "c24d7348-1b54-4be6-b21e-347fb25782f0",
-                    "path": "<Keyboard>/e",
+                    "id": "d069ca74-47c3-4553-87cb-9a7f5dad9e2b",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -132,12 +113,23 @@
                 },
                 {
                     "name": "",
-                    "id": "3f0b46a9-f5f2-4656-80fc-fda014d5e8d5",
-                    "path": "<Gamepad>/buttonSouth",
+                    "id": "0aa9da4c-6ff7-4f0e-a92c-02131224ba43",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a38491e-e2a0-42e1-881d-2aad38e15423",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

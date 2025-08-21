@@ -4,48 +4,81 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public float moveSpeed = 5f;
-    public float rotationSpeed = 720f;
+    public float jumpForce = 5f;
+    public float gravity = -9.81f;
 
     private CharacterController controller;
     private Vector2 moveInput;
+    private Vector3 velocity;
+    private bool jumpQueued = false;
 
     void Awake()
     {
         controller = GetComponent<CharacterController>();
     }
 
-    // Hooked from PlayerInput (Invoke Unity Events) → Player/Move
-    public void OnMove(InputAction.CallbackContext ctx)
+    // --- CALLED BY PLAYERINPUT EVENTS ---
+    public void OnMove(InputAction.CallbackContext context)
     {
-        moveInput = ctx.ReadValue<Vector2>();
+        moveInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        Debug.Log($"OnJump called. isGrounded: {controller.isGrounded}, performed: {context.performed}");
+        if (context.performed && controller.isGrounded)
+        {
+            jumpQueued = true;
+            Debug.Log("Jump queued!");
+        }
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("Interact pressed!");
+        }
     }
 
     void Update()
     {
-        // Get camera-relative directions on the XZ plane
-        var cam = Camera.main;
-        if (cam == null) return;
+        // 1. Calculate movement input (X/Z only, Y is vertical for gravity/jump)
+        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
+        if (move.magnitude > 1f)
+            move.Normalize();
 
-        Vector3 forward = cam.transform.forward;
-        forward.y = 0f;
-        forward.Normalize();
-
-        Vector3 right = cam.transform.right;
-        right.y = 0f;
-        right.Normalize();
-
-        // Convert 2D input to world space using camera axes
-        Vector3 moveWorld = (right * moveInput.x + forward * moveInput.y);
-
-        if (moveWorld.sqrMagnitude > 0.0001f)
+        // 2. Rotate character to face movement direction (optional for top-down)
+        if (move.sqrMagnitude > 0.01f)
         {
-            // Face movement direction
-            Quaternion targetRot = Quaternion.LookRotation(moveWorld, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            Quaternion targetRot = Quaternion.LookRotation(move, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, 720f * Time.deltaTime);
         }
 
-        controller.SimpleMove(moveWorld * moveSpeed);
+        // 3. Handle gravity and jump
+        if (controller.isGrounded)
+        {
+            velocity.y = -2f; // Small negative value to keep grounded
+
+            if (jumpQueued)
+            {
+                velocity.y = jumpForce;
+                jumpQueued = false;
+                Debug.Log("Jump!");
+            }
+        }
+        else
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
+
+        // 4. Combine movement with gravity/jump
+        Vector3 totalMove = move * moveSpeed;
+        totalMove.y = velocity.y;
+
+        // 5. Apply movement (call only ONCE)
+        controller.Move(totalMove * Time.deltaTime);
     }
 }
