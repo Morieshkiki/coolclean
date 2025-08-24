@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 5f;
+    public float walkSpeed = 5f;
+    public float runSpeed = 9f;
     public float jumpForce = 5f;
     public float gravity = -9.81f;
 
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private Vector3 velocity;
     private bool jumpQueued = false;
+    private bool isRunning = false;
 
     void Awake()
     {
@@ -23,6 +25,12 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        // "performed" is true while held, "canceled" is when released
+        isRunning = context.ReadValueAsButton();
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -45,6 +53,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        float currentSpeed = isRunning ? runSpeed : walkSpeed;
+
         // 1. Calculate movement input (X/Z only, Y is vertical for gravity/jump)
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         if (move.magnitude > 1f)
@@ -75,7 +85,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // 4. Combine movement with gravity/jump
-        Vector3 totalMove = move * moveSpeed;
+        Vector3 totalMove = move * currentSpeed;
         totalMove.y = velocity.y;
 
         // 5. Apply movement (call only ONCE)
