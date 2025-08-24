@@ -145,7 +145,7 @@
                 {
                     "name": "",
                     "id": "ab5134c4-087b-4e4d-8cc4-6d44f042271a",
-                    "path": "<Joystick>/{Submit}",
+                    "path": "<HID::Microntek              USB Joystick          >/button2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -168,6 +168,17 @@
                     "name": "",
                     "id": "73a21aef-d7f4-4451-858a-04be98d6f7ce",
                     "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dfdb84a6-d6d8-4b64-b1c6-e83452f5fb77",
+                    "path": "<HID::Microntek              USB Joystick          >/button6",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
